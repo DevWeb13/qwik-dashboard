@@ -6,6 +6,9 @@ import {
 } from "@builder.io/qwik-city";
 import { RouterHead } from "./components/router-head/router-head";
 
+// Supports weights 100-900
+import "@fontsource-variable/inter";
+
 import "./global.css";
 
 export default component$(() => {

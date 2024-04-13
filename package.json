@@ -46,6 +46,7 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "dependencies": {
+    "@fontsource-variable/inter": "^5.0.17",
     "@qwikest/icons": "^0.0.13"
   }
 }
