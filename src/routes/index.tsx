@@ -14,11 +14,7 @@ export default component$(() => {
       <div class="mt-4 flex grow flex-col gap-4 md:flex-row">
         <div class="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
           <div class={styles.shape} />
-          <p
-            class={
-              "lusitana text-xl text-gray-800 md:text-3xl md:leading-normal"
-            }
-          >
+          <p class="lusitana text-xl text-gray-800 md:text-3xl md:leading-normal">
             <strong>Welcome to LRD-Qwik.</strong> This is the example for the{" "}
             <Link
               href="https://www.learn-qwik.com/learn/"
