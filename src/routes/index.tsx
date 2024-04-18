@@ -6,6 +6,7 @@ import styles from "./home.module.css";
 import { LRDQwikLogo } from "~/assets/svg/LRDQwikLogo";
 
 import HeroImg from "~/assets/img/heroImg.png?jsx";
+import HeroMobileImg from "~/assets/img/heroMobileImg.png?jsx";
 
 export default component$(() => {
   return (
@@ -46,6 +47,7 @@ export default component$(() => {
         <div class="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
           {/* Add Hero Images Here */}
           <HeroImg class="hidden md:block" />
+          <HeroMobileImg class="block md:hidden" />
         </div>
       </div>
     </main>
