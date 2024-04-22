@@ -1,3 +1,5 @@
+// src/components/ui/dashboard/nav-links.tsx
+
 import { component$ } from "@builder.io/qwik";
 
 import {

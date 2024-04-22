@@ -1,8 +1,10 @@
+// src/components/ui/dashboard/sidenav.tsx
+
 import { component$ } from "@builder.io/qwik";
 import { Link } from "@builder.io/qwik-city";
 import { LRDQwikLogo } from "~/assets/svg/LRDQwikLogo";
 import { HiPowerOutline } from "@qwikest/icons/heroicons";
-import { NavLinks } from "./dashboard/nav-links";
+import { NavLinks } from "./nav-links";
 
 export const SideNav = component$(() => {
   return (
@@ -11,7 +13,7 @@ export const SideNav = component$(() => {
         class="mb-2 flex h-20 items-end justify-start rounded-md bg-blue-600 p-4 md:h-40"
         href="/"
       >
-        <div class="w-32 text-white md:w-40">
+        <div class=" text-white ">
           <LRDQwikLogo />
         </div>
       </Link>

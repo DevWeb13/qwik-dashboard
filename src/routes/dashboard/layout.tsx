@@ -1,7 +1,7 @@
 // /src/routes/dashboard/layout.tsx
 
 import { component$, Slot } from "@builder.io/qwik";
-import { SideNav } from "~/components/ui/sidenav";
+import { SideNav } from "~/components/ui/dashboard/sidenav";
 
 export default component$(() => {
   return (
