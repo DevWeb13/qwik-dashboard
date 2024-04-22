@@ -7,7 +7,7 @@ interface LRDQwikLogoProps {
 export const LRDQwikLogo = component$<LRDQwikLogoProps>(
   ({ style = "h-12 w-12" }) => {
     return (
-      <div class="lusitana flex flex-row items-center gap-1 leading-none text-white">
+      <div class="lusitana text-nowrap flex flex-row items-center gap-1 leading-none text-white">
         <svg
           version="1.0"
           xmlns="http://www.w3.org/2000/svg"
@@ -130,7 +130,7 @@ l53 56 -54 54 c-29 30 -58 54 -64 54 -6 0 -35 -24 -64 -54z"
             />
           </g>
         </svg>
-        <p class="text-[1.5rem] font-bold">LRD-Qwik</p>
+        <p class="text-nowrap  text-[1.5rem] font-bold">LRD-Qwik</p>
       </div>
     );
   },
