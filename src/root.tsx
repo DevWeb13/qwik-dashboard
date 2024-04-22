@@ -1,3 +1,5 @@
+// src/root.tsx
+
 import { component$ } from "@builder.io/qwik";
 import {
   QwikCityProvider,
