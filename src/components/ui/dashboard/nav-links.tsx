@@ -8,9 +8,8 @@ import {
   HiDocumentDuplicateOutline,
 } from "@qwikest/icons/heroicons";
 
-import { useLocation } from "@builder.io/qwik-city";
+import { Link, useLocation } from "@builder.io/qwik-city";
 
-import { Link } from "@builder.io/qwik-city";
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
