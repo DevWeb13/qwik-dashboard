@@ -37,6 +37,6 @@
   "include": [
     "src",
     "./*.d.ts",
-    "./*.config.ts"
+    "./*.config.ts",
   ]
 }
