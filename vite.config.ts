@@ -24,7 +24,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
     optimizeDeps: {
       // Put problematic deps that break bundling here, mostly those with binaries.
       // For example ['better-sqlite3'] if you use that in server functions.
-      exclude: [],
+      exclude: ['@qwikest/icons/heroicons'],
     },
     // This tells Vite how to bundle the server code.
     ssr:
@@ -37,7 +37,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
             // If a dep-of-dep needs to be external, add it here
             // For example, if something uses `bcrypt` but you don't have it as a dep, you can write
             // external: [...Object.keys(dependencies), 'bcrypt']
-            external: [...Object.keys(dependencies), '@qwikest/icons/heroicons'],
+            external: Object.keys(dependencies),
           }
         : undefined,
     server: {
