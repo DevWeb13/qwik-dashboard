@@ -15,14 +15,16 @@
     "build": "qwik build",
     "build.client": "vite build",
     "build.preview": "vite build --ssr src/entry.preview.tsx",
+    "build.server": "vite build -c adapters/vercel-edge/vite.config.ts",
     "build.types": "tsc --incremental --noEmit",
-    "deploy": "echo 'Run \"npm run qwik add\" to install a server adapter'",
+    "deploy": "vercel deploy",
     "dev": "vite --mode ssr",
     "dev.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
     "fmt": "prettier --write .",
     "fmt.check": "prettier --check .",
     "lint": "eslint \"src/**/*.ts*\"",
     "preview": "qwik build preview && vite preview --open",
+    "seed": "node -r dotenv/config ./scripts/seed.js",
     "start": "vite --open --mode ssr",
     "qwik": "qwik"
   },
@@ -42,11 +44,15 @@
     "tailwindcss": "3.3.3",
     "typescript": "5.3.3",
     "undici": "*",
+    "vercel": "^29.1.1",
     "vite": "^5.1.4",
-    "vite-tsconfig-paths": "^4.2.1"
+    "vite-tsconfig-paths": "^4.2.1",
+    "@qwikest/icons": "^0.0.13"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.0.17",
-    "@qwikest/icons": "^0.0.13"
+    "@vercel/postgres": "^0.8.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5"
   }
 }
