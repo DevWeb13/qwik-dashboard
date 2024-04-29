@@ -1,6 +1,6 @@
 // src/lib/data.ts
 
-import { sql } from '@vercel/postgres';
+import { sql, createPool } from '@vercel/postgres';
 import {
   CustomerField,
   CustomersTableType,
@@ -14,32 +14,24 @@ import { formatCurrency } from './utils';
 import { server$ } from '@builder.io/qwik-city';
 
 
-  
-
-
-
-export const  fetchRevenue = server$(async function () {
-  console.log(this.env.get('POSTGRES_URL'));
-  // Add noStore() here to prevent the response from being cached.
-  // This is equivalent to in fetch(..., {cache: 'no-store'}).
+export const fetchRevenue = server$(async function () {
+  const connectionString = this.env.get('POSTGRES_URL'); // S'assurer que la chaîne de connexion est récupérée correctement
+  const pool = createPool({
+    connectionString: connectionString,
+    ssl: {
+      rejectUnauthorized: false  // Nécessaire pour certaines configurations, dépend de votre DB et de son certificat.
+    }
+  });
 
   try {
-    // Artificially delay a response for demo purposes.
-    // Don't do this in production :)
-
-    // console.log('Fetching revenue data...');
-    // await new Promise((resolve) => setTimeout(resolve, 3000));
-
-    const data = await sql<Revenue>`SELECT * FROM revenue`;
-
-    // console.log('Data fetch completed after 3 seconds.');
-
-    return data.rows;
+    const { rows } = await pool.query('SELECT * FROM revenue');
+    await pool.end();
+    return rows;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch revenue data: ' + (error as Error).message);
   }
-})
+});
 
 export async function fetchLatestInvoices() {
   try {
