@@ -5,8 +5,7 @@ import { SideNav } from "~/components/ui/dashboard/sidenav";
 import { routeLoader$ } from "@builder.io/qwik-city";
 import { fetchRevenue } from "~/lib/data";
 
-export const useFetchRevenue = routeLoader$(async (requestEvent) => {
-  console.log(requestEvent.env.get("POSTGRES_URL"));
+export const useFetchRevenue = routeLoader$(async () => {
   const revenue = await fetchRevenue();
   return revenue;
 });

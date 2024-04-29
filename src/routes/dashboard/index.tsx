@@ -1,4 +1,6 @@
 import { component$ } from "@builder.io/qwik";
+import { useFetchRevenue } from "./layout";
+import { RevenueChart } from "~/components/ui/dashboard/revenue-chart";
 // import { Card } from "~/components/ui/dashboard/cards";
 // import { RevenueChart } from "~/components/ui/dashboard/revenue-chart";
 // import LatestInvoices from "~/ui/dashboard/latest-invoices";
@@ -12,8 +14,8 @@ import { component$ } from "@builder.io/qwik";
 // import { Card } from "~/components/ui/dashboard/cards";
 
 export default component$(() => {
-  // const revenue = useFetchRevenue().value;
-  // console.log("revenue", revenue);
+  const revenue = useFetchRevenue().value;
+  console.log("revenue", revenue);
 
   // const latestInvoices = useFetchLatestInvoices().value;
 
@@ -36,11 +38,11 @@ export default component$(() => {
           value={numberOfCustomers}
           type="customers"
         />
-      </div>
+      </div> */}
       <div class="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
         <RevenueChart revenue={revenue} />
-        <LatestInvoices latestInvoices={latestInvoices} />
-      </div> */}
+        {/* <LatestInvoices latestInvoices={latestInvoices} /> */}
+      </div>
     </main>
   );
 });
