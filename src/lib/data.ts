@@ -1,3 +1,5 @@
+// src/lib/data.ts
+
 import { sql } from '@vercel/postgres';
 import {
   CustomerField,
@@ -9,6 +11,11 @@ import {
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
+
+console.log({
+    POSTGRES_URL: process.env.POSTGRES_URL,
+    POSTGRES_URL_NON_POOLING: process.env.POSTGRES_URL_NON_POOLING
+  });
 
 
 
@@ -30,7 +37,7 @@ export async function fetchRevenue() {
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch revenue data.');
+    throw new Error('Failed to fetch revenue data: ' + (error as Error).message);
   }
 }
 
