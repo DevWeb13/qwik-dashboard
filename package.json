@@ -47,11 +47,11 @@
     "vercel": "^29.1.1",
     "vite": "^5.1.4",
     "vite-tsconfig-paths": "^4.2.1",
-    "@qwikest/icons": "^0.0.13"
+    "@qwikest/icons": "^0.0.13",
+    "@vercel/postgres": "^0.8.0"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.0.17",
-    "@vercel/postgres": "^0.8.0",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5"
   }

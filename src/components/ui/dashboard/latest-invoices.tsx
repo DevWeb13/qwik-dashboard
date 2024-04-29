@@ -21,7 +21,7 @@ export const LatestInvoices = component$<LatestInvoicesProps>(
                   key={invoice.id}
                   class={
                     "flex flex-row items-center justify-between py-4" +
-                    (i !== 0 && " border-t")
+                    (i !== 0 ? " border-t" : "")
                   }
                 >
                   <div class="flex items-center">
