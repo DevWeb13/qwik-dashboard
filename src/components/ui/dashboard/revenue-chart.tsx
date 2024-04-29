@@ -26,7 +26,7 @@ export const RevenueChart = component$<RevenueChartProps>(({ revenue }) => {
       <h2 class={`lusitana mb-4 text-xl md:text-2xl`}>Recent Revenue</h2>
 
       <div class="rounded-xl bg-gray-50 p-4">
-        <div class="sm:grid-cols-13 mt-0 grid grid-cols-12 items-end gap-2 rounded-md bg-white p-4 md:gap-4">
+        <div class=" sm:grid-cols-13 mt-0 grid grid-cols-12 items-end gap-2 rounded-md bg-white p-4 md:gap-4">
           <div
             class="mb-6 hidden flex-col justify-between text-sm text-gray-400 sm:flex"
             style={{ height: `${chartHeight}px` }}

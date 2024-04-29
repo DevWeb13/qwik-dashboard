@@ -29,7 +29,7 @@ const getPool = server$(function () {
 
 export const fetchRevenue = server$(async function () {
   
-  const pool = await  getPool();
+  const pool = await getPool();
 
   try {
     const { rows } = await pool.query<Revenue>('SELECT * FROM revenue');
@@ -55,6 +55,7 @@ export async function fetchLatestInvoices() {
       ...invoice,
       amount: formatCurrency(invoice.amount),
     }));
+    await pool.end();
     return latestInvoices;
   } catch (error) {
     console.error('Database Error:', error);
@@ -85,6 +86,8 @@ export async function fetchCardData() {
     const numberOfCustomers = Number(data[1].rows[0].count ?? '0');
     const totalPaidInvoices = formatCurrency(data[2].rows[0].paid ?? '0');
     const totalPendingInvoices = formatCurrency(data[2].rows[0].pending ?? '0');
+
+    await pool.end();
 
     return {
       numberOfCustomers,
@@ -127,7 +130,7 @@ export async function fetchFilteredInvoices(
       ORDER BY invoices.date DESC
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `);
-
+    await pool.end();
     return invoices.rows;
   } catch (error) {
     console.error('Database Error:', error);
@@ -150,6 +153,7 @@ export async function fetchInvoicesPages(query: string) {
   `);
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    await pool.end();
     return totalPages;
   } catch (error) {
     console.error('Database Error:', error);
@@ -175,7 +179,7 @@ export async function fetchInvoiceById(id: string) {
       // Convert amount from cents to dollars
       amount: invoice.amount / 100,
     }));
-
+await pool.end();
     return invoice[0];
   } catch (error) {
     console.error('Database Error:', error);
@@ -193,6 +197,7 @@ export async function fetchCustomers() {
       FROM customers
       ORDER BY name ASC
     `);
+    await pool.end();
 
     const customers = data.rows;
     return customers;
@@ -228,7 +233,7 @@ export async function fetchFilteredCustomers(query: string) {
       total_pending: formatCurrency(customer.total_pending),
       total_paid: formatCurrency(customer.total_paid),
     }));
-
+await pool.end();
     return customers;
   } catch (err) {
     console.error('Database Error:', err);
@@ -240,9 +245,12 @@ export async function getUser(email: string) {
   const pool = await  getPool();
   try {
     const user = await pool.query(`SELECT * FROM users WHERE email=${email}`);
+    await pool.end();
     return user.rows[0] as User;
   } catch (error) {
     console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');
   }
 }
+
+
