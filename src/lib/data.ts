@@ -11,15 +11,17 @@ import {
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
+import { server$ } from '@builder.io/qwik-city';
 
 console.log({
-    POSTGRES_URL: process.env.POSTGRES_URL,
+    POSTGRES_URL: process.env['POSTGRES_URL'],
     POSTGRES_URL_NON_POOLING: process.env.POSTGRES_URL_NON_POOLING
   });
+  
 
 
 
-export async function fetchRevenue() {
+export const  fetchRevenue = server$(async function () {
   // Add noStore() here to prevent the response from being cached.
   // This is equivalent to in fetch(..., {cache: 'no-store'}).
 
@@ -39,7 +41,7 @@ export async function fetchRevenue() {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch revenue data: ' + (error as Error).message);
   }
-}
+})
 
 export async function fetchLatestInvoices() {
   try {
