@@ -13,15 +13,13 @@ import {
 import { formatCurrency } from './utils';
 import { server$ } from '@builder.io/qwik-city';
 
-console.log({
-    POSTGRES_URL: process.env['POSTGRES_URL'],
-    POSTGRES_URL_NON_POOLING: process.env.POSTGRES_URL_NON_POOLING
-  });
+
   
 
 
 
 export const  fetchRevenue = server$(async function () {
+  console.log(this.env.get('POSTGRES_URL'));
   // Add noStore() here to prevent the response from being cached.
   // This is equivalent to in fetch(..., {cache: 'no-store'}).
 
