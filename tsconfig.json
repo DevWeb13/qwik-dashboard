@@ -38,6 +38,5 @@
     "src",
     "./*.d.ts",
     "./*.config.ts",
-    "scripts/seed.js",
   ]
 }
