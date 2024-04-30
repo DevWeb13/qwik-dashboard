@@ -40,10 +40,4 @@ lerna-debug.log*
 .yarn/*
 !.yarn/releases
 
-# Env
-.env
 
-# Vercel
-.vercel
-
-.env*.local
