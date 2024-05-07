@@ -14,16 +14,24 @@ import { formatCurrency } from './utils';
 import { server$ } from '@builder.io/qwik-city';
 
 const getPool = server$(function () {
+  console.log('getPool');
   const connectionString = this.env.get('POSTGRES_URL'); // Get the connection string from the environment variables
+
+  if(!connectionString) throw new Error('POSTGRES_URL environment variable is not set');
+
   // Create a new pool with the connection string
   const pool = createPool({
     connectionString: connectionString,
   });
+
+  if(!pool) throw new Error('Failed to create a new pool');
+
   return pool;
 })
 
 
-export async function fetchRevenue() {
+
+export const fetchRevenue = server$(async function () {
   // Open a new connection
   const pool = await getPool();
   try {
@@ -35,9 +43,10 @@ export async function fetchRevenue() {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch revenue data: ' + (error as Error).message);
   }
-};
+});
 
-export async function fetchLatestInvoices() {
+
+export const fetchLatestInvoices = server$(async function () {
   const pool = await  getPool();
   try {
     const data = await pool.query<LatestInvoiceRaw>(`
@@ -57,9 +66,9 @@ export async function fetchLatestInvoices() {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the latest invoices.');
   }
-}
+});
 
-export async function fetchCardData() {
+export const fetchCardData = server$(async function () {  
   const pool = await  getPool();
   try {
     // You can probably combine these into a single pool.query query
@@ -95,13 +104,12 @@ export async function fetchCardData() {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch card data.');
   }
-}
+});
 
 const ITEMS_PER_PAGE = 6;
-export async function fetchFilteredInvoices(
-  query: string,
-  currentPage: number,
-) {
+
+export const fetchFilteredInvoices = server$(async function (query: string, currentPage: number)
+{
   const pool = await  getPool();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
@@ -132,10 +140,10 @@ export async function fetchFilteredInvoices(
     console.error('Database Error:', error);
     throw new Error('Failed to fetch invoices.');
   }
-}
+});
 
-export async function fetchInvoicesPages(query: string) {
-  const pool = await  getPool();
+export const fetchInvoicesPages = server$(async function (query: string) {  
+  const pool = await getPool();
   try {
     const count = await pool.query(`SELECT COUNT(*)
     FROM invoices
@@ -155,10 +163,10 @@ export async function fetchInvoicesPages(query: string) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of invoices.');
   }
-}
+});
 
-export async function fetchInvoiceById(id: string) {
-  const pool = await  getPool();
+export const fetchInvoiceById = server$(async function (id: string) {
+  const pool = await getPool();
   try {
     const data = await pool.query<InvoiceForm>(`
       SELECT
@@ -181,9 +189,9 @@ await pool.end();
     console.error('Database Error:', error);
     throw new Error('Failed to fetch invoice.');
   }
-}
+});
 
-export async function fetchCustomers() {
+export const fetchCustomers = server$(async function () {
   const pool = await  getPool();
   try {
     const data = await pool.query<CustomerField>(`
@@ -201,9 +209,9 @@ export async function fetchCustomers() {
     console.error('Database Error:', err);
     throw new Error('Failed to fetch all customers.');
   }
-}
+});
 
-export async function fetchFilteredCustomers(query: string) {
+export const fetchFilteredCustomers = server$(async function (query: string) {
   const pool = await  getPool();
   try {
     const data = await pool.query<CustomersTableType>(`
@@ -235,9 +243,9 @@ await pool.end();
     console.error('Database Error:', err);
     throw new Error('Failed to fetch customer table.');
   }
-}
+});
 
-export async function getUser(email: string) {
+export const getUser = server$(async function (email: string) {
   const pool = await  getPool();
   try {
     const user = await pool.query(`SELECT * FROM users WHERE email=${email}`);
@@ -247,6 +255,6 @@ export async function getUser(email: string) {
     console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');
   }
-}
+});
 
 

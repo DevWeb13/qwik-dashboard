@@ -10,7 +10,6 @@ import { LatestInvoices } from "~/components/ui/dashboard/latest-invoices";
 
 export default component$(() => {
   const revenue = useFetchRevenue().value;
-  console.log("revenue", revenue);
 
   const latestInvoices = useFetchLatestInvoices().value;
 
