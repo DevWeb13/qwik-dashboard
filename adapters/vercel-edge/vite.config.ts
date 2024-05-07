@@ -13,6 +13,9 @@ export default extendConfig(baseConfig, () => {
       },
       outDir: ".vercel/output/functions/_qwik-city.func",
     },
-    plugins: [vercelEdgeAdapter()],
+    plugins: [vercelEdgeAdapter({
+      // Add environment variables here
+      vcConfigEnvVarsInUse: ["POSTGRES_URL"],
+    })],
   };
 });
