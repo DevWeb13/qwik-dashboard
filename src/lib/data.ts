@@ -14,25 +14,21 @@ import { formatCurrency } from './utils';
 import { server$ } from '@builder.io/qwik-city';
 
 const getPool = server$(function () {
-  const connectionString = this.env.get('POSTGRES_URL'); // S'assurer que la chaîne de connexion est récupérée correctement
-  // Création de la pool avec la chaîne de connexion
+  const connectionString = this.env.get('POSTGRES_URL'); // Get the connection string from the environment variables
+  // Create a new pool with the connection string
   const pool = createPool({
     connectionString: connectionString,
-    ssl: {
-      rejectUnauthorized: false  // Nécessaire pour certaines configurations, dépend de votre DB et de son certificat
-    }
   });
-
   return pool;
 })
 
 
 export const fetchRevenue = server$(async function () {
-  
+  // Open a new connection
   const pool = await getPool();
-
   try {
     const { rows } = await pool.query<Revenue>('SELECT * FROM revenue');
+    // Close the connection
     await pool.end();
     return rows;
   } catch (error) {
