@@ -10,7 +10,7 @@ export const LatestInvoices = component$<LatestInvoicesProps>(
   ({ latestInvoices }) => {
     return (
       <div class="flex w-full flex-col md:col-span-4">
-        <h2 class={`lusitana mb-4 text-xl md:text-2xl`}>Latest Invoices</h2>
+        <h2 class="lusitana mb-4 text-xl md:text-2xl">Latest Invoices</h2>
         <div class="flex grow flex-col justify-between rounded-xl bg-gray-50 p-4">
           <div class="bg-white px-6">
             {latestInvoices.map((invoice, i) => {

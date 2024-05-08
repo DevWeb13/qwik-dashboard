@@ -23,7 +23,7 @@ export const RevenueChart = component$<RevenueChartProps>(({ revenue }) => {
 
   return (
     <div class="w-full md:col-span-4">
-      <h2 class={`lusitana mb-4 text-xl md:text-2xl`}>Recent Revenue</h2>
+      <h2 class="lusitana mb-4 text-xl md:text-2xl">Recent Revenue</h2>
 
       <div class="rounded-xl bg-gray-50 p-4">
         <div class=" mt-0 grid grid-cols-12 items-end gap-2 rounded-md bg-white p-4 sm:grid-cols-13 md:gap-4">
