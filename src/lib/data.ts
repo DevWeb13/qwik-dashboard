@@ -21,8 +21,6 @@ const getPool = server$(function () {
   return pool;
 })
 
-
-
 export const fetchRevenue = server$(async function () {
   // Open a new connection
   const pool = await getPool();
@@ -36,7 +34,6 @@ export const fetchRevenue = server$(async function () {
     throw new Error('Failed to fetch revenue data: ' + (error as Error).message);
   }
 });
-
 
 export const fetchLatestInvoices = server$(async function () {
   const pool = await  getPool();
