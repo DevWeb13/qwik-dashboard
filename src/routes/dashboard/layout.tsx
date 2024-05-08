@@ -3,7 +3,7 @@
 import { component$, Slot } from "@builder.io/qwik";
 import { SideNav } from "~/components/ui/dashboard/sidenav";
 import { routeLoader$ } from "@builder.io/qwik-city";
-import { fetchRevenue, fetchLatestInvoices, fetchCardData } from "~/lib/data";
+import { fetchCardData, fetchLatestInvoices, fetchRevenue } from "~/lib/data";
 
 export const useFetchRevenue = routeLoader$(async () => {
   const revenue = await fetchRevenue();
@@ -16,8 +16,18 @@ export const useFetchLatestInvoices = routeLoader$(async () => {
 });
 
 export const useFetchCardData = routeLoader$(async () => {
-  const cardData = await fetchCardData();
-  return cardData;
+  const {
+    numberOfCustomers,
+    numberOfInvoices,
+    totalPaidInvoices,
+    totalPendingInvoices,
+  } = await fetchCardData();
+  return {
+    numberOfCustomers,
+    numberOfInvoices,
+    totalPaidInvoices,
+    totalPendingInvoices,
+  };
 });
 
 export default component$(() => {
