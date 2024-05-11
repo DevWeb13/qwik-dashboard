@@ -15,7 +15,7 @@ export default extendConfig(baseConfig, () => {
       {
         ssg: {
             include: ['/'],
-            origin: 'https://qwik-dashboard.com',
+            origin: 'https://qwik-dashboard.vercel.app',
             sitemapOutFile: 'sitemap.xml'
           }
         }
