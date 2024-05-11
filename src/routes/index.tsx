@@ -1,3 +1,5 @@
+// src/routes/index.tsx
+
 import { component$ } from "@builder.io/qwik";
 import { Link, type DocumentHead } from "@builder.io/qwik-city";
 import { HiArrowRightOutline } from "~/assets/svg/HiArrowRightOutline";
