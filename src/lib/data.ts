@@ -6,7 +6,6 @@ import { formatCurrency } from './utils';
 import { server$ } from '@builder.io/qwik-city';
 
 const getPool = server$(function () {
-  console.log('getPool');
   const connectionString = this.env.get('POSTGRES_URL'); // Get the connection string from the environment variables
 
   if(!connectionString) throw new Error('POSTGRES_URL environment variable is not set');
@@ -25,7 +24,13 @@ export const fetchRevenue = server$(async function () {
   // Open a new connection
   const pool = await getPool();
   try {
+    console.log('Fetching revenue data...');
+    await new Promise((resolve) => setTimeout(resolve, 30000));
+
     const { rows } = await pool.query<Revenue>('SELECT * FROM revenue');
+
+    console.log('Data fetch completed after 3 seconds.');
+
     // Close the connection
     await pool.end();
     return rows;
