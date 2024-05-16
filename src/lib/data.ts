@@ -24,12 +24,7 @@ export const fetchRevenue = server$(async function () {
   // Open a new connection
   const pool = await getPool();
   try {
-    console.log('Fetching revenue data...');
-    await new Promise((resolve) => setTimeout(resolve, 30000));
-
     const { rows } = await pool.query<Revenue>('SELECT * FROM revenue');
-
-    console.log('Data fetch completed after 3 seconds.');
 
     // Close the connection
     await pool.end();
