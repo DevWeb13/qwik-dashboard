@@ -1,29 +1,16 @@
 // /src/routes/dashboard/layout.tsx
 
 import { component$, Slot } from "@builder.io/qwik";
-import { SideNav } from "~/components/ui/dashboard/sidenav";
 import { routeLoader$ } from "@builder.io/qwik-city";
-import { fetchRevenue, fetchLatestInvoices, fetchCardData } from "~/lib/data";
+import { SideNav } from "~/components/ui/dashboard/sidenav";
+import { fetchCardData, fetchLatestInvoices, fetchRevenue } from "~/lib/data";
 
-export const useFetchRevenue = routeLoader$(async () => {
-  console.log("fetching revenue started...");
-  const revenue = await fetchRevenue();
-  console.log("fetching revenue done...");
-  return revenue;
-});
-
-export const useFetchLatestInvoices = routeLoader$(async () => {
-  console.log("fetching latest invoices started...");
-  const latestInvoices = await fetchLatestInvoices();
-  console.log("fetching latest invoices done...");
-  return latestInvoices;
-});
-
-export const useFetchCardData = routeLoader$(async () => {
-  console.log("fetching card data started...");
-  const cardData = await fetchCardData();
-  console.log("fetching card data done...");
-  return cardData;
+export const useFetchData = routeLoader$(async () => {
+  return {
+    revenue: await fetchRevenue(),
+    latestInvoices: await fetchLatestInvoices(),
+    cardData: await fetchCardData(),
+  };
 });
 
 export default component$(() => {
