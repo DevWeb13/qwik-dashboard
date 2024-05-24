@@ -9,7 +9,6 @@ import { routeLoader$ } from "@builder.io/qwik-city";
 import { fetchCardData, fetchLatestInvoices, fetchRevenue } from "~/lib/data";
 
 export const useFetchData = routeLoader$(async () => {
-  console.log("fetching data");
   const [revenue, latestInvoices, cardData] = await Promise.all([
     fetchRevenue(),
     fetchLatestInvoices(),

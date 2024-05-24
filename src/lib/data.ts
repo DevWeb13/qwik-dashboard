@@ -1,7 +1,7 @@
 // src/lib/data.ts
 
 import { createPool } from '@vercel/postgres';
-import { LatestInvoiceRaw, Revenue } from './definitions';
+import { InvoicesTable, LatestInvoiceRaw, Revenue } from './definitions';
 import { formatCurrency } from './utils';
 import { server$ } from '@builder.io/qwik-city';
 
@@ -24,14 +24,8 @@ export const fetchRevenue = server$(async function () {
   // Open a new connection
   const pool = await getPool();
   try {
-     // We artificially delay a response for demo purposes.
-    // Don't do this in production :)
-    console.log('Fetching revenue data...');
-    await new Promise((resolve) => setTimeout(resolve, 3000));
     
     const { rows } = await pool.query<Revenue>('SELECT * FROM revenue');
-
-    console.log('Data fetch completed after 3 seconds.');
 
     // Close the connection
     await pool.end();
@@ -99,5 +93,48 @@ export const fetchCardData = server$(async function () {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch card data.');
+  }
+});
+
+const ITEMS_PER_PAGE = 6;
+
+export const fetchFilteredInvoices = server$(async function (
+  query: string,
+  currentPage: number,
+) {
+  console.log('query', query);
+  console.log('currentPage', currentPage);
+  const pool = await getPool();
+  const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const invoices = await pool.query<InvoicesTable>(`
+      SELECT
+        invoices.id,
+        invoices.amount,
+        invoices.date,
+        invoices.status,
+        customers.name,
+        customers.email,
+        customers.image_url
+      FROM invoices
+      JOIN customers ON invoices.customer_id = customers.id
+      WHERE
+        customers.name ILIKE $1 OR
+        customers.email ILIKE $1 OR
+        invoices.amount::text ILIKE $1 OR
+        invoices.date::text ILIKE $1 OR
+        invoices.status ILIKE $1
+      ORDER BY invoices.date DESC
+      LIMIT $2 OFFSET $3
+    `, [`%${query}%`, ITEMS_PER_PAGE, offset]);
+
+    // console.log('invoices', invoices);
+    await pool.end();
+
+    return invoices.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch invoices.');
   }
 });
