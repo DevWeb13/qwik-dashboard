@@ -36,6 +36,7 @@
     "@types/node": "^20.11.24",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",
+    "@vercel/postgres": "^0.8.0",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.57.0",
     "eslint-plugin-qwik": "^1.5.1",
@@ -47,8 +48,7 @@
     "undici": "*",
     "vercel": "^29.1.1",
     "vite": "^5.1.4",
-    "vite-tsconfig-paths": "^4.2.1",
-    "@vercel/postgres": "^0.8.0"
+    "vite-tsconfig-paths": "^4.2.1"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.0.17",

@@ -2,6 +2,7 @@
 
 import { component$, $ } from "@builder.io/qwik";
 import { useLocation, useNavigate } from "@builder.io/qwik-city";
+import { useDebouncer } from "~/utils/debouncer";
 import { HiMagnifyingGlassOutline } from "@qwikest/icons/heroicons";
 
 export const Search = component$(({ placeholder }: { placeholder: string }) => {
@@ -9,9 +10,9 @@ export const Search = component$(({ placeholder }: { placeholder: string }) => {
   const searchParams = loc.url.searchParams;
   const pathname = loc.url.pathname;
   const nav = useNavigate();
-  console.log(nav);
 
   const handleSearch = $(function handleSearch(term: string) {
+    console.log(`Searching... ${term}`);
     const params = new URLSearchParams(searchParams);
     if (term) {
       params.set("query", term);
@@ -22,6 +23,9 @@ export const Search = component$(({ placeholder }: { placeholder: string }) => {
       replaceState: true,
     });
   });
+
+  const debouncedSearch = useDebouncer(handleSearch, 300);
+
   return (
     <div class="relative flex flex-1 flex-shrink-0">
       <label for="search" class="sr-only">
@@ -33,7 +37,7 @@ export const Search = component$(({ placeholder }: { placeholder: string }) => {
         onInput$={(e) => {
           console.log(e);
           const inputValue = (e.target as HTMLInputElement).value;
-          handleSearch(inputValue);
+          debouncedSearch(inputValue);
         }}
         defaultValue={searchParams.get("query")?.toString()}
       />
