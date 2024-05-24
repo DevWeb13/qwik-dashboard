@@ -138,3 +138,50 @@ export const fetchFilteredInvoices = server$(async function (
     throw new Error('Failed to fetch invoices.');
   }
 });
+
+// export async function fetchInvoicesPages(query: string) {
+//   noStore();
+//   try {
+//     const count = await sql`SELECT COUNT(*)
+//     FROM invoices
+//     JOIN customers ON invoices.customer_id = customers.id
+//     WHERE
+//       customers.name ILIKE ${`%${query}%`} OR
+//       customers.email ILIKE ${`%${query}%`} OR
+//       invoices.amount::text ILIKE ${`%${query}%`} OR
+//       invoices.date::text ILIKE ${`%${query}%`} OR
+//       invoices.status ILIKE ${`%${query}%`}
+//   `;
+
+//     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+//     return totalPages;
+//   } catch (error) {
+//     console.error('Database Error:', error);
+//     throw new Error('Failed to fetch total number of invoices.');
+//   }
+// }
+
+export const fetchInvoicesPages = server$(async function (query: string) {
+  const pool = await getPool();
+  try {
+    const count = await pool.query(`SELECT COUNT(*)
+      FROM invoices
+      JOIN customers ON invoices.customer_id = customers.id
+      WHERE
+        customers.name ILIKE $1 OR
+        customers.email ILIKE $1 OR
+        invoices.amount::text ILIKE $1 OR
+        invoices.date::text ILIKE $1 OR
+        invoices.status ILIKE $1
+    `, [`%${query}%`]);
+
+    const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
+    await pool.end();
+    return totalPages;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch total number of invoices.');
+  }
+}
+);
+

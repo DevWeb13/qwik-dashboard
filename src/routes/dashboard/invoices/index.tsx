@@ -1,13 +1,13 @@
 // src/routes/dashboard/invoices/index.tsx
 
-// import { Pagination } from "~/components/ui/invoices/pagination";
+import { Pagination } from "~/components/ui/invoices/pagination";
 import { Search } from "~/components/ui/search";
 import { Table } from "~/components/ui/invoices/table";
 import { CreateInvoice } from "~/components/ui/invoices/buttons";
 import { InvoicesTableSkeleton } from "~/components/ui/skeletons";
 import { Resource, component$, useResource$ } from "@builder.io/qwik";
 import { useLocation } from "@builder.io/qwik-city";
-import { fetchFilteredInvoices } from "~/lib/data";
+import { fetchFilteredInvoices, fetchInvoicesPages } from "~/lib/data";
 
 export default component$(() => {
   const loc = useLocation();
@@ -23,6 +23,12 @@ export default component$(() => {
     const filteredInvoices = await fetchFilteredInvoices(query, currentPage);
     // console.log("filteredInvoices", filteredInvoices);
     return filteredInvoices;
+  });
+
+  const totalPagesResource = useResource$(async () => {
+    const searchParams = loc.url.searchParams;
+    const query = searchParams.get("query") || "";
+    return fetchInvoicesPages(query);
   });
 
   return (
@@ -46,7 +52,17 @@ export default component$(() => {
         }}
       />
       <div class="mt-5 flex w-full justify-center">
-        {/* <Pagination totalPages={totalPages} /> */}
+        <Resource
+          value={totalPagesResource}
+          onResolved={(totalPages) => {
+            return <Pagination totalPages={totalPages} />;
+          }}
+          onPending={() => null}
+          onRejected={(error) => {
+            console.error(error);
+            return <div>Error</div>;
+          }}
+        />
       </div>
     </div>
   );
