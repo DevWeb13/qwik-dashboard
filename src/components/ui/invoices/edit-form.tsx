@@ -1,14 +1,14 @@
 import type { CustomerField, InvoiceForm } from "~/lib/definitions";
-
 import {
   HiCheckOutline,
   HiClockOutline,
   HiCurrencyDollarOutline,
   HiUserCircleOutline,
 } from "@qwikest/icons/heroicons";
-import { Link } from "@builder.io/qwik-city";
+import { Form, Link, useNavigate } from "@builder.io/qwik-city";
 import { Button } from "~/components/ui/button";
-import { component$ } from "@builder.io/qwik";
+import { component$, useStore } from "@builder.io/qwik";
+import { useUpdateInvoice } from "~/routes/dashboard/invoices/[id]/edit";
 
 export const EditInvoiceForm = component$(
   ({
@@ -18,9 +18,27 @@ export const EditInvoiceForm = component$(
     invoice: InvoiceForm;
     customers: CustomerField[];
   }) => {
+    const nav = useNavigate();
+    const action = useUpdateInvoice();
+
+    const store = useStore({
+      customerId: invoice.customer_id,
+    });
+
+    console.log("invoice.id", invoice.id);
     return (
-      <form>
+      <Form
+        action={action}
+        onSubmitCompleted$={async () => {
+          await nav("/dashboard/invoices");
+        }}
+        spaReset
+      >
         <div class="rounded-md bg-gray-50 p-4 md:p-6">
+          {/* cachedInput */}
+          <input type="hidden" name="id" value={invoice.id} />
+
+          {/* Invoice Name */}
           {/* Customer Name */}
           <div class="mb-4">
             <label for="customer" class="mb-2 block text-sm font-medium">
@@ -31,7 +49,10 @@ export const EditInvoiceForm = component$(
                 id="customer"
                 name="customerId"
                 class="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                // defaultValue={invoice.customer_id}
+                value={store.customerId}
+                onChange$={(e) =>
+                  (store.customerId = (e.target as HTMLSelectElement).value)
+                }
               >
                 <option value="" disabled>
                   Select a customer
@@ -58,7 +79,7 @@ export const EditInvoiceForm = component$(
                   name="amount"
                   type="number"
                   step="0.01"
-                  // defaultValue={invoice.amount}
+                  defaultValue={invoice.amount.toString()}
                   placeholder="Enter USD amount"
                   class="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 />
@@ -119,7 +140,7 @@ export const EditInvoiceForm = component$(
           </Link>
           <Button type="submit">Edit Invoice</Button>
         </div>
-      </form>
+      </Form>
     );
   },
 );

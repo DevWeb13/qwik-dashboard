@@ -24,3 +24,21 @@ export const createInvoice = server$(async function (data: { customerId: string,
 });
 
 
+
+
+export const updateInvoice = server$(async function (data: { id: string, customerId: string, amount: number, status: string }) {
+  const amountInCents = Math.round(data.amount * 100); // Arrondir pour éviter les problèmes de précision
+  const pool = await getPool();
+
+  try {
+    await pool.query(
+      `UPDATE invoices
+       SET customer_id = $1, amount = $2, status = $3
+       WHERE id = $4`,
+      [data.customerId, amountInCents, data.status, data.id],
+    );
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to update invoice.');
+  }
+});

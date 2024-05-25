@@ -1,6 +1,6 @@
 // src/routes/dashboard/invoices/create/index.tsx
 
-import { FormComponent } from "~/components/ui/invoices/create-form";
+import { CreateForm } from "~/components/ui/invoices/create-form";
 import { Breadcrumbs } from "~/components/ui/invoices/breadcrumbs";
 import { fetchCustomers } from "~/lib/data";
 import { Resource, component$, useResource$ } from "@builder.io/qwik";
@@ -48,7 +48,7 @@ export default component$(() => {
       <Resource
         value={customersResource}
         onResolved={(customers) => {
-          return <FormComponent customers={customers} />;
+          return <CreateForm customers={customers} />;
         }}
         onPending={() => null}
         onRejected={(error) => {

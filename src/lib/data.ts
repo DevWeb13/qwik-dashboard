@@ -1,7 +1,7 @@
 // src/lib/data.ts
 
 import { createPool } from '@vercel/postgres';
-import { CustomerField, InvoicesTable, LatestInvoiceRaw, Revenue } from './definitions';
+import { CustomerField, InvoiceForm, InvoicesTable, LatestInvoiceRaw, Revenue } from './definitions';
 import { formatCurrency } from './utils';
 import { server$ } from '@builder.io/qwik-city';
 
@@ -177,4 +177,31 @@ export const fetchCustomers = server$(async function () {
     throw new Error('Failed to fetch all customers.');
   }
 });
+
+export const fetchInvoiceById = server$(async function (id: string) {
+  const pool = await getPool();
+  try {
+    const data = await pool.query<InvoicesTable>(`
+      SELECT
+        invoices.id,
+        invoices.customer_id,
+        invoices.amount,
+        invoices.status
+      FROM invoices
+      WHERE invoices.id = $1;
+    `, [id]);
+
+    const invoice = data.rows.map((invoice) => ({
+      ...invoice,
+      amount: invoice.amount / 100,
+    }));
+
+    await pool.end();
+    return invoice[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch invoice.');
+  }
+});
+
 

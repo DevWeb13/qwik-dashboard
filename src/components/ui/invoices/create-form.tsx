@@ -13,7 +13,7 @@ import { Button } from "~/components/ui/button";
 import { component$ } from "@builder.io/qwik";
 import { useCreateInvoice } from "~/routes/dashboard/invoices/create";
 
-export const FormComponent = component$(
+export const CreateForm = component$(
   ({ customers }: { customers: CustomerField[] }) => {
     const nav = useNavigate();
     const action = useCreateInvoice();
