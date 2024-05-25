@@ -112,7 +112,7 @@ export const Table = component$(
                     <td class="whitespace-nowrap py-3 pl-6 pr-3">
                       <div class="flex justify-end gap-3">
                         <UpdateInvoice id={invoice.id} />
-                        <DeleteInvoice />
+                        <DeleteInvoice id={invoice.id} />
                       </div>
                     </td>
                   </tr>
