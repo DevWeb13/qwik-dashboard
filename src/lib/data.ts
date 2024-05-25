@@ -1,11 +1,11 @@
 // src/lib/data.ts
 
 import { createPool } from '@vercel/postgres';
-import { InvoicesTable, LatestInvoiceRaw, Revenue } from './definitions';
+import { CustomerField, InvoicesTable, LatestInvoiceRaw, Revenue } from './definitions';
 import { formatCurrency } from './utils';
 import { server$ } from '@builder.io/qwik-city';
 
-const getPool = server$(function () {
+export const getPool = server$(function () {
   const connectionString = this.env.get('POSTGRES_URL'); // Get the connection string from the environment variables
 
   if(!connectionString) throw new Error('POSTGRES_URL environment variable is not set');
@@ -139,27 +139,7 @@ export const fetchFilteredInvoices = server$(async function (
   }
 });
 
-// export async function fetchInvoicesPages(query: string) {
-//   noStore();
-//   try {
-//     const count = await sql`SELECT COUNT(*)
-//     FROM invoices
-//     JOIN customers ON invoices.customer_id = customers.id
-//     WHERE
-//       customers.name ILIKE ${`%${query}%`} OR
-//       customers.email ILIKE ${`%${query}%`} OR
-//       invoices.amount::text ILIKE ${`%${query}%`} OR
-//       invoices.date::text ILIKE ${`%${query}%`} OR
-//       invoices.status ILIKE ${`%${query}%`}
-//   `;
 
-//     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
-//     return totalPages;
-//   } catch (error) {
-//     console.error('Database Error:', error);
-//     throw new Error('Failed to fetch total number of invoices.');
-//   }
-// }
 
 export const fetchInvoicesPages = server$(async function (query: string) {
   const pool = await getPool();
@@ -184,4 +164,17 @@ export const fetchInvoicesPages = server$(async function (query: string) {
   }
 }
 );
+
+export const fetchCustomers = server$(async function () {
+  const pool = await getPool();
+  try {
+    const data = await pool.query<CustomerField>('SELECT id, name FROM customers ORDER BY name ASC');
+    const customers = data.rows;
+    await pool.end();
+    return customers;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch all customers.');
+  }
+});
 

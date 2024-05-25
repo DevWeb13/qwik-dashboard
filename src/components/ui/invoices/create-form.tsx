@@ -1,5 +1,7 @@
+// src/components/ui/invoices/create-form.tsx
+
 import type { CustomerField } from "~/lib/definitions";
-import { Link } from "@builder.io/qwik-city";
+import { Link, Form, useNavigate } from "@builder.io/qwik-city";
 
 import {
   HiCheckOutline,
@@ -9,11 +11,20 @@ import {
 } from "@qwikest/icons/heroicons";
 import { Button } from "~/components/ui/button";
 import { component$ } from "@builder.io/qwik";
+import { useCreateInvoice } from "~/routes/dashboard/invoices/create";
 
-export const Form = component$(
+export const FormComponent = component$(
   ({ customers }: { customers: CustomerField[] }) => {
+    const nav = useNavigate();
+    const action = useCreateInvoice();
     return (
-      <form>
+      <Form
+        action={action}
+        onSubmitCompleted$={async () => {
+          await nav("/dashboard/invoices");
+        }}
+        spaReset
+      >
         <div class="rounded-md bg-gray-50 p-4 md:p-6">
           {/* Customer Name */}
           <div class="mb-4">
@@ -110,7 +121,7 @@ export const Form = component$(
           </Link>
           <Button type="submit">Create Invoice</Button>
         </div>
-      </form>
+      </Form>
     );
   },
 );
