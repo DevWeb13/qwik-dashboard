@@ -1,10 +1,11 @@
 import { component$ } from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
+import { Form, Link } from "@builder.io/qwik-city";
 import {
   HiPencilOutline,
   HiTrashOutline,
   HiPlusOutline,
 } from "@qwikest/icons/heroicons";
+import { useDeleteInvoice } from "~/routes/dashboard/invoices";
 
 export const CreateInvoice = component$(() => {
   return (
@@ -30,12 +31,14 @@ export const UpdateInvoice = component$(({ id }: { id: string }) => {
 });
 
 export const DeleteInvoice = component$(({ id }: { id: string }) => {
+  const action = useDeleteInvoice();
   return (
-    <>
+    <Form action={action}>
+      <input type="hidden" name="id" value={id} />
       <button class="rounded-md border p-2 hover:bg-gray-100">
         <span class="sr-only">Delete</span>
         <HiTrashOutline class="w-5" />
       </button>
-    </>
+    </Form>
   );
 });

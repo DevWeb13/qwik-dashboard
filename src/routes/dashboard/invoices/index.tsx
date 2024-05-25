@@ -6,8 +6,28 @@ import { Table } from "~/components/ui/invoices/table";
 import { CreateInvoice } from "~/components/ui/invoices/buttons";
 import { InvoicesTableSkeleton } from "~/components/ui/skeletons";
 import { Resource, component$, useResource$ } from "@builder.io/qwik";
-import { useLocation } from "@builder.io/qwik-city";
+import { routeAction$, useLocation, z, zod$ } from "@builder.io/qwik-city";
 import { fetchFilteredInvoices, fetchInvoicesPages } from "~/lib/data";
+import { deleteInvoice } from "~/lib/actions";
+
+const FormSchema = z.object({
+  id: z.string().uuid(),
+});
+
+export const useDeleteInvoice = routeAction$(async (data, { fail }) => {
+  console.log("data", data);
+  try {
+    await deleteInvoice(data);
+    return {
+      success: true,
+    };
+  } catch (error: any) {
+    console.error("Failed to delete invoice:", error);
+    return fail(500, {
+      message: error.message,
+    });
+  }
+}, zod$(FormSchema));
 
 export default component$(() => {
   const loc = useLocation();

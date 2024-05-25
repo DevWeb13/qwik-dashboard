@@ -17,6 +17,7 @@ export const createInvoice = server$(async function (data: { customerId: string,
        VALUES ($1, $2, $3, $4)`,
       [data.customerId, amountInCents, data.status, date],
     );
+    await pool.end();
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to create invoice.');
@@ -40,5 +41,21 @@ export const updateInvoice = server$(async function (data: { id: string, custome
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to update invoice.');
+  }
+});
+
+export const deleteInvoice = server$(async function (data: { id: string }) {
+  const pool = await getPool();
+
+  try {
+    await pool.query(
+      `DELETE FROM invoices
+       WHERE id = $1`,
+      [data.id],
+    );
+
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to delete invoice.');
   }
 });
