@@ -1,32 +1,41 @@
 // src/routes/dashboard/index.tsx
 
-import { Resource, component$ } from "@builder.io/qwik";
+import { Resource, component$, useResource$ } from "@builder.io/qwik";
 
 import { RevenueChart } from "~/components/ui/dashboard/revenue-chart";
 import { Card } from "~/components/ui/dashboard/cards";
 import { LatestInvoices } from "~/components/ui/dashboard/latest-invoices";
-import { routeLoader$ } from "@builder.io/qwik-city";
+// import { routeLoader$ } from "@builder.io/qwik-city";
 import { fetchCardData, fetchLatestInvoices, fetchRevenue } from "~/lib/data";
 
-export const useFetchData = routeLoader$(() => {
-  return async () => {
+// export const useFetchData = routeLoader$(() => {
+//   return async () => {
+//     const [revenue, latestInvoices, cardData] = await Promise.all([
+//       fetchRevenue(),
+//       fetchLatestInvoices(),
+//       fetchCardData(),
+//     ]);
+//     return { revenue, latestInvoices, cardData };
+//   };
+// });
+
+export default component$(() => {
+  // const data = useFetchData();
+
+  const dataResource = useResource$(async () => {
     const [revenue, latestInvoices, cardData] = await Promise.all([
       fetchRevenue(),
       fetchLatestInvoices(),
       fetchCardData(),
     ]);
     return { revenue, latestInvoices, cardData };
-  };
-});
-
-export default component$(() => {
-  const data = useFetchData();
+  });
 
   return (
     <main>
       <h1 class="lusitana mb-4 text-xl md:text-2xl">Dashboard</h1>
       <Resource
-        value={data}
+        value={dataResource}
         onResolved={({ revenue, latestInvoices, cardData }) => {
           const {
             totalPaidInvoices,
