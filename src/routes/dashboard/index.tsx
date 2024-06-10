@@ -1,28 +1,20 @@
 // src/routes/dashboard/index.tsx
 
 import { Resource, component$, useResource$ } from "@builder.io/qwik";
-
 import { RevenueChart } from "~/components/ui/dashboard/revenue-chart";
 import { Card } from "~/components/ui/dashboard/cards";
 import { LatestInvoices } from "~/components/ui/dashboard/latest-invoices";
-// import { routeLoader$ } from "@builder.io/qwik-city";
 import { fetchCardData, fetchLatestInvoices, fetchRevenue } from "~/lib/data";
-
-// export const useFetchData = routeLoader$(() => {
-//   return async () => {
-//     const [revenue, latestInvoices, cardData] = await Promise.all([
-//       fetchRevenue(),
-//       fetchLatestInvoices(),
-//       fetchCardData(),
-//     ]);
-//     return { revenue, latestInvoices, cardData };
-//   };
-// });
+import { DashboardSkeleton } from "~/components/ui/skeletons";
 
 export default component$(() => {
-  // const data = useFetchData();
+  const dataResource = useResource$(async ({ cleanup }) => {
+    // A good practice is to use `AbortController` to abort the fetching of data if
+    // new request comes in. We create a new `AbortController` and register a `cleanup`
+    // function which is called when this function re-runs.
+    const controller = new AbortController();
+    cleanup(() => controller.abort());
 
-  const dataResource = useResource$(async () => {
     const [revenue, latestInvoices, cardData] = await Promise.all([
       fetchRevenue(),
       fetchLatestInvoices(),
@@ -78,7 +70,7 @@ export default component$(() => {
           return <div>Error: {error.message}</div>;
         }}
         onPending={() => {
-          return <div>Loading...</div>;
+          return <DashboardSkeleton />;
         }}
       />
     </main>
