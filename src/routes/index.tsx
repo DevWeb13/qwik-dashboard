@@ -36,7 +36,6 @@ export default component$(() => {
             >
               LaReponseDev
             </Link>{" "}
-            .
           </p>
           <Link
             href="/login"

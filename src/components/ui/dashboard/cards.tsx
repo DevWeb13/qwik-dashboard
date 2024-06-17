@@ -1,10 +1,12 @@
-import { component$ } from "@builder.io/qwik";
+import { Resource, component$, useResource$ } from "@builder.io/qwik";
 import {
   HiBanknotesOutline,
   HiClockOutline,
   HiUserGroupOutline,
   HiInboxOutline,
 } from "@qwikest/icons/heroicons";
+import { fetchCardData } from "~/lib/data";
+import { CardsSkeleton } from "~/components/ui/skeletons";
 
 const iconMap = {
   collected: HiBanknotesOutline,
@@ -41,3 +43,52 @@ export const Card = component$(
     );
   },
 );
+
+export const CardsWrapper = component$(() => {
+  const cardDataResource = useResource$(async ({ cleanup }) => {
+    const controller = new AbortController();
+    cleanup(() => controller.abort());
+
+    const cardData = await fetchCardData();
+    return { cardData };
+  });
+  return (
+    <Resource
+      value={cardDataResource}
+      onResolved={({ cardData }) => {
+        const {
+          totalPaidInvoices,
+          totalPendingInvoices,
+          numberOfInvoices,
+          numberOfCustomers,
+        } = cardData;
+        return (
+          <>
+            <Card
+              title="Collected"
+              value={totalPaidInvoices}
+              type="collected"
+            />
+            <Card title="Pending" value={totalPendingInvoices} type="pending" />
+            <Card
+              title="Total Invoices"
+              value={numberOfInvoices}
+              type="invoices"
+            />
+            <Card
+              title="Total Customers"
+              value={numberOfCustomers}
+              type="customers"
+            />
+          </>
+        );
+      }}
+      onRejected={(error) => {
+        return <div>Error: {error.message}</div>;
+      }}
+      onPending={() => {
+        return <CardsSkeleton />;
+      }}
+    />
+  );
+});
