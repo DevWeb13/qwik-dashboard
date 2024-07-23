@@ -1,59 +1,91 @@
+// src/components/ui/invoices/pagination.tsx
+
 import {
   HiArrowLeftOutline,
   HiArrowRightOutline,
 } from "@qwikest/icons/heroicons";
-import { Link } from "@builder.io/qwik-city";
-// import { generatePagination } from "~/lib/utils";
-import { component$ } from "@builder.io/qwik";
+import { Link, useLocation } from "@builder.io/qwik-city";
+import { generatePagination } from "~/lib/utils";
+import { component$, Resource, useResource$ } from "@builder.io/qwik";
+import { fetchInvoicesPages } from "~/lib/data";
 
-export const Pagination = component$(
-  ({ totalPages }: { totalPages: number }) => {
-    // NOTE: comment in this code when you get to this point in the course
+export const Pagination = component$(() => {
+  const loc = useLocation();
+  const pathname = loc.url.pathname;
+  const searchParams = loc.url.searchParams;
+  const currentPage = Number(searchParams.get("page")) || 1;
 
-    // const allPages = generatePagination(currentPage, totalPages);
+  const totalPagesResource = useResource$(async ({ track }) => {
+    track(() => loc.url.pathname);
+    console.log("Fetching invoices pages...");
+    const searchParams = loc.url.searchParams;
+    const query = searchParams.get("query") || "";
+    return fetchInvoicesPages(query);
+  });
 
-    return (
-      <>
-        {/* NOTE: comment in this code when you get to this point in the course */}
+  const createPageURL = (pageNumber: number | string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", pageNumber.toString());
+    return `${pathname}?${params.toString()}`;
+  };
 
-        {/* <div className="inline-flex">
-        <PaginationArrow
-          direction="left"
-          href={createPageURL(currentPage - 1)}
-          isDisabled={currentPage <= 1}
-        />
-
-        <div className="flex -space-x-px">
-          {allPages.map((page, index) => {
-            let position: 'first' | 'last' | 'single' | 'middle' | undefined;
-
-            if (index === 0) position = 'first';
-            if (index === allPages.length - 1) position = 'last';
-            if (allPages.length === 1) position = 'single';
-            if (page === '...') position = 'middle';
-
-            return (
-              <PaginationNumber
-                key={page}
-                href={createPageURL(page)}
-                page={page}
-                position={position}
-                isActive={currentPage === page}
+  return (
+    <>
+      <Resource
+        value={totalPagesResource}
+        onResolved={(totalPages) => {
+          const allPages = generatePagination(currentPage, totalPages);
+          return (
+            <div class="inline-flex">
+              <PaginationArrow
+                direction="left"
+                href={createPageURL(currentPage - 1)}
+                isDisabled={currentPage <= 1}
               />
-            );
-          })}
-        </div>
 
-        <PaginationArrow
-          direction="right"
-          href={createPageURL(currentPage + 1)}
-          isDisabled={currentPage >= totalPages}
-        />
-      </div> */}
-      </>
-    );
-  },
-);
+              <div class="flex -space-x-px">
+                {allPages.map((page, index) => {
+                  let position:
+                    | "first"
+                    | "last"
+                    | "single"
+                    | "middle"
+                    | undefined;
+
+                  if (index === 0) position = "first";
+                  if (index === allPages.length - 1) position = "last";
+                  if (allPages.length === 1) position = "single";
+                  if (page === "...") position = "middle";
+
+                  return (
+                    <PaginationNumber
+                      key={page}
+                      href={createPageURL(page)}
+                      page={page}
+                      position={position}
+                      isActive={currentPage === page}
+                    />
+                  );
+                })}
+              </div>
+
+              <PaginationArrow
+                direction="right"
+                href={createPageURL(currentPage + 1)}
+                isDisabled={currentPage >= totalPages}
+              />
+            </div>
+          );
+        }}
+        onPending={() => null}
+        onRejected={(error) => {
+          console.error(error);
+          return <div>Error</div>;
+        }}
+      />
+    </>
+  );
+});
 
 const PaginationNumber = component$(
   ({

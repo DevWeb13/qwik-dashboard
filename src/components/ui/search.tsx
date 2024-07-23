@@ -15,14 +15,14 @@ export const Search = component$(({ placeholder }: { placeholder: string }) => {
     console.log(`Searching... ${term}`);
 
     const params = new URLSearchParams(searchParams);
+    params.set("page", "1");
     if (term) {
       params.set("query", term);
     } else {
       params.delete("query");
+      params.delete("page");
     }
-    nav(`${pathname}?${params.toString()}`, {
-      replaceState: true,
-    });
+    nav(`${pathname}?${params.toString()}`, { replaceState: true });
   });
 
   const debouncedSearch = useDebouncer(handleSearch, 300);
@@ -39,7 +39,7 @@ export const Search = component$(({ placeholder }: { placeholder: string }) => {
           const inputValue = (e.target as HTMLInputElement).value;
           debouncedSearch(inputValue);
         }}
-        defaultValue={searchParams.get("query")?.toString()}
+        value={loc.url.searchParams.get("query")?.toString()}
       />
       <HiMagnifyingGlassOutline class="absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
     </div>

@@ -18,7 +18,7 @@ export default component$(() => {
       </div>
       <Table />
       <div class="mt-5 flex w-full justify-center">
-        {/* <Pagination totalPages={totalPages} /> */}
+        <Pagination />
       </div>
     </div>
   );
