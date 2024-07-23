@@ -11,22 +11,19 @@ import { fetchInvoicesPages } from "~/lib/data";
 
 export const Pagination = component$(() => {
   const loc = useLocation();
-  const pathname = loc.url.pathname;
-  const searchParams = loc.url.searchParams;
-  const currentPage = Number(searchParams.get("page")) || 1;
+  const currentPage = Number(loc.url.searchParams.get("page")) || 1;
 
   const totalPagesResource = useResource$(async ({ track }) => {
     track(() => loc.url.pathname);
-    console.log("Fetching invoices pages...");
     const searchParams = loc.url.searchParams;
     const query = searchParams.get("query") || "";
     return fetchInvoicesPages(query);
   });
 
   const createPageURL = (pageNumber: number | string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(loc.url.searchParams);
     params.set("page", pageNumber.toString());
-    return `${pathname}?${params.toString()}`;
+    return `${loc.url.pathname}?${params.toString()}`;
   };
 
   return (

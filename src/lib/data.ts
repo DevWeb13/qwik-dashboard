@@ -101,8 +101,6 @@ export const fetchFilteredInvoices = server$(async function (
   query: string,
   currentPage: number,
 ) {
-  console.log('query', query);
-  console.log('currentPage', currentPage);
   const pool = await getPool();
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
@@ -128,7 +126,6 @@ export const fetchFilteredInvoices = server$(async function (
       LIMIT $2 OFFSET $3
     `, [`%${query}%`, ITEMS_PER_PAGE, offset]);
 
-    // console.log('invoices', invoices);
     await pool.end();
 
     return invoices.rows;

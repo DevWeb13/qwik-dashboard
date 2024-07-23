@@ -12,15 +12,12 @@ export const Search = component$(({ placeholder }: { placeholder: string }) => {
   const nav = useNavigate();
 
   const handleSearch = $(function handleSearch(term: string) {
-    console.log(`Searching... ${term}`);
-
     const params = new URLSearchParams(searchParams);
     params.set("page", "1");
     if (term) {
       params.set("query", term);
     } else {
       params.delete("query");
-      params.delete("page");
     }
     nav(`${pathname}?${params.toString()}`, { replaceState: true });
   });
