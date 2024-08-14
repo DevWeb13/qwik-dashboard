@@ -1,6 +1,6 @@
 // src/components/ui/invoices/create-form.tsx
 
-import { Link, Form } from "@builder.io/qwik-city";
+import { Link, Form, useNavigate } from "@builder.io/qwik-city";
 
 import {
   HiCheckOutline,
@@ -21,8 +21,16 @@ export const CreateForm = component$(() => {
   });
 
   const createInvoice = useCreateInvoice();
+
+  const nav = useNavigate();
   return (
-    <Form action={createInvoice}>
+    <Form
+      action={createInvoice}
+      spaReset
+      onSubmitCompleted$={async () => {
+        await nav("/dashboard/invoices");
+      }}
+    >
       <div class="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div class="mb-4">
