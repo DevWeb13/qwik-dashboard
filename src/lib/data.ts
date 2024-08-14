@@ -5,7 +5,7 @@ import { CustomerField, InvoicesTable, LatestInvoiceRaw, Revenue } from './defin
 import { formatCurrency } from './utils';
 import { server$ } from '@builder.io/qwik-city';
 
-const getPool = server$(function () {
+export const getPool = server$(function () {
   const connectionString = this.env.get('POSTGRES_URL'); // Get the connection string from the environment variables
 
   if(!connectionString) throw new Error('POSTGRES_URL environment variable is not set');
