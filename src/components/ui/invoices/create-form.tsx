@@ -12,14 +12,17 @@ import { Button } from "~/components/ui/button";
 import { component$, Resource, useResource$ } from "@builder.io/qwik";
 
 import { fetchCustomers } from "~/lib/data";
+import { useCreateInvoice } from "~/routes/dashboard/invoices/create";
 
 export const CreateForm = component$(() => {
   const customersResource = useResource$(async () => {
     const customers = await fetchCustomers();
     return customers;
   });
+
+  const createInvoice = useCreateInvoice();
   return (
-    <Form>
+    <Form action={createInvoice}>
       <div class="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div class="mb-4">
