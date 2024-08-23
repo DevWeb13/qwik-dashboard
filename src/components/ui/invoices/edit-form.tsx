@@ -6,7 +6,7 @@ import {
   HiCurrencyDollarOutline,
   HiUserCircleOutline,
 } from "@qwikest/icons/heroicons";
-import { Link } from "@builder.io/qwik-city";
+import { Form, Link } from "@builder.io/qwik-city";
 import { Button } from "~/components/ui/button";
 import { component$ } from "@builder.io/qwik";
 
@@ -19,7 +19,7 @@ export const EditInvoiceForm = component$(
     customers: CustomerField[];
   }) => {
     return (
-      <form>
+      <Form>
         <div class="rounded-md bg-gray-50 p-4 md:p-6">
           {/* Customer Name */}
           <div class="mb-4">
@@ -31,11 +31,9 @@ export const EditInvoiceForm = component$(
                 id="customer"
                 name="customerId"
                 class="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-                // defaultValue={invoice.customer_id}
+                value={invoice.customer_id}
               >
-                <option value="" disabled>
-                  Select a customer
-                </option>
+                <option>Select a customer</option>
                 {customers.map((customer) => (
                   <option key={customer.id} value={customer.id}>
                     {customer.name}
@@ -58,7 +56,7 @@ export const EditInvoiceForm = component$(
                   name="amount"
                   type="number"
                   step="0.01"
-                  // defaultValue={invoice.amount}
+                  value={invoice.amount}
                   placeholder="Enter USD amount"
                   class="peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
                 />
@@ -80,7 +78,7 @@ export const EditInvoiceForm = component$(
                     name="status"
                     type="radio"
                     value="pending"
-                    defaultChecked={invoice.status === "pending"}
+                    checked={invoice.status === "pending"}
                     class="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   />
                   <label
@@ -96,7 +94,7 @@ export const EditInvoiceForm = component$(
                     name="status"
                     type="radio"
                     value="paid"
-                    defaultChecked={invoice.status === "paid"}
+                    checked={invoice.status === "paid"}
                     class="h-4 w-4 cursor-pointer border-gray-300 bg-gray-100 text-gray-600 focus:ring-2"
                   />
                   <label
@@ -119,7 +117,7 @@ export const EditInvoiceForm = component$(
           </Link>
           <Button type="submit">Edit Invoice</Button>
         </div>
-      </form>
+      </Form>
     );
   },
 );

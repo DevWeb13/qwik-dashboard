@@ -18,10 +18,10 @@ export const CreateInvoice = component$(() => {
   );
 });
 
-export const UpdateInvoice = component$(() => {
+export const UpdateInvoice = component$(({ id }: { id: string }) => {
   return (
     <Link
-      href="/dashboard/invoices"
+      href={`/dashboard/invoices/${id}/edit`}
       class="rounded-md border p-2 hover:bg-gray-100"
     >
       <HiPencilOutline class="w-5" />
