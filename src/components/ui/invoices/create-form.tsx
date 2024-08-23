@@ -1,7 +1,6 @@
 // src/components/ui/invoices/create-form.tsx
 
 import { Link, Form, useNavigate } from "@builder.io/qwik-city";
-
 import {
   HiCheckOutline,
   HiClockOutline,
@@ -26,9 +25,8 @@ export const CreateForm = component$(() => {
   return (
     <Form
       action={createInvoice}
-      spaReset
       onSubmitCompleted$={async () => {
-        await nav("/dashboard/invoices");
+        await nav("/dashboard/invoices/");
       }}
     >
       <div class="rounded-md bg-gray-50 p-4 md:p-6">
@@ -42,7 +40,7 @@ export const CreateForm = component$(() => {
               id="customer"
               name="customerId"
               class="peer block w-full cursor-pointer rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500"
-              // defaultValue=""
+              value=""
             >
               <option value="" disabled>
                 Select a customer

@@ -9,14 +9,19 @@ export const createInvoice = server$(async function (data: { customerId: string,
   
   const pool = await getPool();
 
-  try {
-    await pool.query(
-      `INSERT INTO invoices (customer_id, amount, status, date)
-       VALUES ($1, $2, $3, $4)`,
-      [data.customerId, amountInCents, data.status, date],
-    );
-  } catch (error) {
-    console.error('Database Error:', error);
-    throw new Error('Failed to create invoice.');
-  }
+  await pool.query(
+    `INSERT INTO invoices (customer_id, amount, status, date)
+      VALUES ($1, $2, $3, $4)`,
+    [data.customerId, amountInCents, data.status, date],
+  );
+
+  //deconnect 
+  pool.end();
+
+  return {
+    customerId: data.customerId,
+    amount: amountInCents,
+    status: data.status,
+    date: date
+  };
 });

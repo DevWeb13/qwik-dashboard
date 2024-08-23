@@ -1,35 +1,27 @@
 // src/routes/dashboard/invoices/create/index.tsx
 
 import { component$ } from "@builder.io/qwik";
-import { routeAction$, zod$ } from "@builder.io/qwik-city";
+import { routeAction$, zod$, z } from "@builder.io/qwik-city";
 import { Breadcrumbs } from "~/components/ui/invoices/breadcrumbs";
 import { CreateForm } from "~/components/ui/invoices/create-form";
 import { createInvoice } from "~/lib/actions";
 
-import { z } from "zod";
-
 const FormSchema = z.object({
   id: z.string(),
   customerId: z.string(),
-  amount: z.coerce.number(),
+  amount: z.coerce.number().positive(),
   status: z.enum(["pending", "paid"]),
   date: z.string(),
 });
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 
-export const useCreateInvoice = routeAction$(async (data, { fail }) => {
-  try {
-    await createInvoice(data);
-    return {
-      success: true,
-    };
-  } catch (error: any) {
-    console.error("Failed to create invoice:", error);
-    return fail(500, {
-      message: error.message,
-    });
-  }
+export const useCreateInvoice = routeAction$(async (data) => {
+  const newInvoice = await createInvoice(data);
+  return {
+    success: true,
+    newInvoice,
+  };
 }, zod$(CreateInvoice));
 
 export default component$(() => {
