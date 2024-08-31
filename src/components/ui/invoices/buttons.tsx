@@ -1,10 +1,13 @@
+// src/components/ui/invoices/buttons.tsx
+
 import { component$ } from "@builder.io/qwik";
-import { Link } from "@builder.io/qwik-city";
+import { Link, useNavigate } from "@builder.io/qwik-city";
 import {
   HiPencilOutline,
   HiTrashOutline,
   HiPlusOutline,
 } from "@qwikest/icons/heroicons";
+import { useDeleteInvoice } from "~/routes/dashboard/invoices";
 
 export const CreateInvoice = component$(() => {
   return (
@@ -18,10 +21,10 @@ export const CreateInvoice = component$(() => {
   );
 });
 
-export const UpdateInvoice = component$(() => {
+export const UpdateInvoice = component$(({ id }: { id: string }) => {
   return (
     <Link
-      href="/dashboard/invoices"
+      href={`/dashboard/invoices/${id}/edit`}
       class="rounded-md border p-2 hover:bg-gray-100"
     >
       <HiPencilOutline class="w-5" />
@@ -29,13 +32,19 @@ export const UpdateInvoice = component$(() => {
   );
 });
 
-export const DeleteInvoice = component$(() => {
+export const DeleteInvoice = component$(({ id }: { id: string }) => {
+  const nav = useNavigate();
+  const deleteInvoiceAction = useDeleteInvoice();
   return (
-    <>
-      <button class="rounded-md border p-2 hover:bg-gray-100">
-        <span class="sr-only">Delete</span>
-        <HiTrashOutline class="w-5" />
-      </button>
-    </>
+    <button
+      class="rounded-md border p-2 hover:bg-gray-100"
+      onClick$={async () => {
+        await deleteInvoiceAction.submit({ id });
+        await nav("/dashboard/invoices");
+      }}
+    >
+      <span class="sr-only">Delete</span>
+      <HiTrashOutline class="w-5" />
+    </button>
   );
 });
