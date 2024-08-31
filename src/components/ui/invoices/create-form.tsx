@@ -19,12 +19,12 @@ export const CreateForm = component$(() => {
     return customers;
   });
 
-  const createInvoice = useCreateInvoice();
+  const createInvoiceAction = useCreateInvoice();
 
   const nav = useNavigate();
   return (
     <Form
-      action={createInvoice}
+      action={createInvoiceAction}
       onSubmitCompleted$={async () => {
         await nav("/dashboard/invoices/");
       }}

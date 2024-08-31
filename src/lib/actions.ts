@@ -25,3 +25,45 @@ export const createInvoice = server$(async function (data: { customerId: string,
     date: date
   };
 });
+
+
+export const updateInvoice = server$(async function (data: { id: string, customerId: string, amount: number, status: string }) {
+  const amountInCents = Math.round(data.amount * 100);
+  
+  const pool = await getPool();
+
+    await pool.query(
+      `UPDATE invoices
+       SET customer_id = $1, amount = $2, status = $3
+       WHERE id = $4`,
+      [data.customerId, amountInCents, data.status, data.id],
+    );
+
+    //deconnect
+    pool.end();
+
+    return {
+      id: data.id,
+      customerId: data.customerId,
+      amount: amountInCents,
+      status: data.status,
+    };
+});
+
+
+export const deleteInvoice = server$(async function (id: string) {
+  const pool = await getPool();
+
+  await pool.query(
+    `DELETE FROM invoices
+      WHERE id = $1`,
+    [id],
+  );
+
+  //deconnect
+  pool.end();
+
+  return {
+    id: id,
+  };
+});
