@@ -2,7 +2,7 @@
 
 import { getPool } from './data';
 
-export const createInvoice = (async function (data: { customerId: string, amount: number, status: string }) {
+export const createInvoice = async function (data: { customerId: string, amount: number, status: string }) {
   const amountInCents = Math.round(data.amount * 100);
   const date = new Date().toISOString().split('T')[0];
   
@@ -14,8 +14,7 @@ export const createInvoice = (async function (data: { customerId: string, amount
     [data.customerId, amountInCents, data.status, date],
   );
 
-  //deconnect 
-  pool.end();
+  await pool.end();
 
   return {
     customerId: data.customerId,
@@ -23,10 +22,10 @@ export const createInvoice = (async function (data: { customerId: string, amount
     status: data.status,
     date: date
   };
-});
+};
 
 
-export const updateInvoice = (async function (data: { id: string, customerId: string, amount: number, status: string }) {
+export const updateInvoice = async function (data: { id: string, customerId: string, amount: number, status: string }) {
   const amountInCents = Math.round(data.amount * 100);
   
   const pool = await getPool();
@@ -38,8 +37,7 @@ export const updateInvoice = (async function (data: { id: string, customerId: st
       [data.customerId, amountInCents, data.status, data.id],
     );
 
-    //deconnect
-    pool.end();
+    await pool.end();
 
     return {
       id: data.id,
@@ -47,10 +45,10 @@ export const updateInvoice = (async function (data: { id: string, customerId: st
       amount: amountInCents,
       status: data.status,
     };
-});
+};
 
 
-export const deleteInvoice = (async function (id: string) {
+export const deleteInvoice = async function (id: string) {
   const pool = await getPool();
 
   await pool.query(
@@ -59,10 +57,9 @@ export const deleteInvoice = (async function (id: string) {
     [id],
   );
 
-  //deconnect
-  pool.end();
+  await pool.end();
 
   return {
     id: id,
   };
-});
+};
