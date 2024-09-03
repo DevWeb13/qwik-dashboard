@@ -16,12 +16,9 @@ const FormSchema = z.object({
 
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 
-export const useCreateInvoice = routeAction$(async (data) => {
-  const newInvoice = await createInvoice(data);
-  return {
-    success: true,
-    newInvoice,
-  };
+export const useCreateInvoice = routeAction$(async (data, { redirect }) => {
+  await createInvoice(data);
+  throw redirect(302, "/dashboard/invoices");
 }, zod$(CreateInvoice));
 
 export default component$(() => {
