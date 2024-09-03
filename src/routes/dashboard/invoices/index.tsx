@@ -8,12 +8,9 @@ import { CreateInvoice } from "~/components/ui/invoices/buttons";
 import { routeAction$ } from "@builder.io/qwik-city";
 import { deleteInvoice } from "~/lib/actions";
 
-export const useDeleteInvoice = routeAction$(async (data) => {
-  const deletedInvoiceId = await deleteInvoice(data.id.toString());
-  return {
-    success: true,
-    deletedInvoiceId,
-  };
+export const useDeleteInvoice = routeAction$(async (data, { redirect }) => {
+  await deleteInvoice(data.id.toString());
+  throw redirect(302, "/dashboard/invoices");
 });
 
 export default component$(() => {
