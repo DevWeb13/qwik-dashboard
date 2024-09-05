@@ -58,8 +58,8 @@ export const Table = component$(() => {
                           <p>{formatDateToLocal(invoice.date)}</p>
                         </div>
                         <div class="flex justify-end gap-2">
-                          <UpdateInvoice />
-                          <DeleteInvoice />
+                          <UpdateInvoice id={invoice.id} />
+                          <DeleteInvoice id={invoice.id} />
                         </div>
                       </div>
                     </div>
@@ -120,8 +120,8 @@ export const Table = component$(() => {
                         </td>
                         <td class="whitespace-nowrap py-3 pl-6 pr-3">
                           <div class="flex justify-end gap-3">
-                            <UpdateInvoice />
-                            <DeleteInvoice />
+                            <UpdateInvoice id={invoice.id} />
+                            <DeleteInvoice id={invoice.id} />
                           </div>
                         </td>
                       </tr>
