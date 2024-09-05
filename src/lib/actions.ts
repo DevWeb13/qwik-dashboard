@@ -16,7 +16,7 @@ export const createInvoice = server$(async function (data: { customerId: string,
   );
 
   //deconnect 
-  pool.end();
+  await pool.end();
 
   return {
     customerId: data.customerId,
@@ -40,7 +40,7 @@ export const updateInvoice = server$(async function (data: { id: string, custome
     );
 
     //deconnect
-    pool.end();
+    await pool.end();
 
     return {
       id: data.id,
@@ -61,7 +61,7 @@ export const deleteInvoice = server$(async function (id: string) {
   );
 
   //deconnect
-  pool.end();
+  await pool.end();
 
   return {
     id: id,
