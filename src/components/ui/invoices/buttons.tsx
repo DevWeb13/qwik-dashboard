@@ -1,7 +1,7 @@
 // src/components/ui/invoices/buttons.tsx
 
 import { component$ } from "@builder.io/qwik";
-import { Link, useNavigate } from "@builder.io/qwik-city";
+import { Link } from "@builder.io/qwik-city";
 import {
   HiPencilOutline,
   HiTrashOutline,
@@ -33,14 +33,12 @@ export const UpdateInvoice = component$(({ id }: { id: string }) => {
 });
 
 export const DeleteInvoice = component$(({ id }: { id: string }) => {
-  const nav = useNavigate();
   const deleteInvoiceAction = useDeleteInvoice();
   return (
     <button
       class="rounded-md border p-2 hover:bg-gray-100"
       onClick$={async () => {
         await deleteInvoiceAction.submit({ id });
-        await nav("/dashboard/invoices");
       }}
     >
       <span class="sr-only">Delete</span>
