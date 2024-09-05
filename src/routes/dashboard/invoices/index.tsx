@@ -5,16 +5,6 @@ import { Pagination } from "~/components/ui/invoices/pagination";
 import { Search } from "~/components/ui/search";
 import { Table } from "~/components/ui/invoices/table";
 import { CreateInvoice } from "~/components/ui/invoices/buttons";
-import { routeAction$ } from "@builder.io/qwik-city";
-import { deleteInvoice } from "~/lib/actions";
-
-export const useDeleteInvoice = routeAction$(async (data) => {
-  const deletedInvoiceId = await deleteInvoice(data.id.toString());
-  return {
-    success: true,
-    deletedInvoiceId,
-  };
-});
 
 export default component$(() => {
   return (
