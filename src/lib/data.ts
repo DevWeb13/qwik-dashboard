@@ -155,8 +155,7 @@ export const fetchInvoicesPages = server$(async function (query: string) {
   } finally {
     await pool.end();
   }
-}
-);
+});
 
 export const fetchCustomers = server$(async function () {
   const pool = await getPool();
