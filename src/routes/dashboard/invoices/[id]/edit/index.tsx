@@ -9,19 +9,18 @@ import { updateInvoice } from "~/lib/actions";
 
 const FormSchema = z.object({
   customerId: z.string(),
-  amount: z.coerce.number().max(21474836.47),
+  amount: z.coerce.number().positive(),
   status: z.enum(["pending", "paid"]),
 });
 
-export const useUpdateInvoice = routeAction$(async (data, { params }) => {
-  const dataWithId = { ...data, id: params.id };
-
-  const updatedInvoice = await updateInvoice(dataWithId);
-  return {
-    success: true,
-    updatedInvoice,
-  };
-}, zod$(FormSchema));
+export const useUpdateInvoice = routeAction$(
+  async (data, { params, redirect }) => {
+    const dataWithId = { ...data, id: params.id };
+    await updateInvoice(dataWithId);
+    throw redirect(302, "/dashboard/invoices");
+  },
+  zod$(FormSchema),
+);
 
 export default component$(() => {
   const loc = useLocation();

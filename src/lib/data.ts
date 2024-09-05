@@ -126,12 +126,12 @@ export const fetchFilteredInvoices = server$(async function (
       LIMIT $2 OFFSET $3
     `, [`%${query}%`, ITEMS_PER_PAGE, offset]);
 
-    await pool.end();
-
     return invoices.rows;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch invoices.');
+  } finally {
+    await pool.end();
   }
 });
 
@@ -150,25 +150,26 @@ export const fetchInvoicesPages = server$(async function (query: string) {
     `, [`%${query}%`]);
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
-    await pool.end();
     return totalPages;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of invoices.');
+  } finally {
+    await pool.end();
   }
-}
-);
+});
 
 export const fetchCustomers = server$(async function () {
   const pool = await getPool();
   try {
     const data = await pool.query<CustomerField>('SELECT id, name FROM customers ORDER BY name ASC');
     const customers = data.rows;
-    await pool.end();
     return customers;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch all customers.');
+  } finally {
+    await pool.end();
   }
 });
 
@@ -189,11 +190,11 @@ export const fetchInvoiceById = server$(async function (id: string) {
       ...invoice,
       amount: invoice.amount / 100,
     }));
-
-    await pool.end();
     return invoice[0];
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch invoice.');
+  } finally {
+    await pool.end();
   }
 });
