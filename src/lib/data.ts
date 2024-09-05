@@ -172,3 +172,29 @@ export const fetchCustomers = server$(async function () {
     await pool.end();
   }
 });
+
+export const fetchInvoiceById = server$(async function (id: string) {
+  const pool = await getPool();
+  try {
+    const data = await pool.query<InvoicesTable>(`
+      SELECT
+        invoices.id,
+        invoices.customer_id,
+        invoices.amount,
+        invoices.status
+      FROM invoices
+      WHERE invoices.id = $1;
+    `, [id]);
+
+    const invoice = data.rows.map((invoice) => ({
+      ...invoice,
+      amount: invoice.amount / 100,
+    }));
+    return invoice[0];
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch invoice.');
+  } finally {
+    await pool.end();
+  }
+});
