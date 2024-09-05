@@ -158,3 +158,17 @@ export const fetchInvoicesPages = server$(async function (query: string) {
     await pool.end();
   }
 });
+
+export const fetchCustomers = server$(async function () {
+  const pool = await getPool();
+  try {
+    const data = await pool.query<CustomerField>('SELECT id, name FROM customers ORDER BY name ASC');
+    const customers = data.rows;
+    return customers;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch all customers.');
+  } finally {
+    await pool.end();
+  }
+});
