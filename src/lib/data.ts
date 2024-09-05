@@ -126,12 +126,12 @@ export const fetchFilteredInvoices = server$(async function (
       LIMIT $2 OFFSET $3
     `, [`%${query}%`, ITEMS_PER_PAGE, offset]);
 
-    await pool.end();
-
     return invoices.rows;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch invoices.');
+  } finally {
+    await pool.end();
   }
 });
 
@@ -150,11 +150,11 @@ export const fetchInvoicesPages = server$(async function (query: string) {
     `, [`%${query}%`]);
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
-    await pool.end();
     return totalPages;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch total number of invoices.');
+  } finally {
+    await pool.end();
   }
-}
-);
+});
