@@ -6,8 +6,8 @@ import { formatCurrency } from './utils';
 import { server$ } from '@builder.io/qwik-city';
 
 const getPool = server$(function () {
-  const connectionString = this.env.get('POSTGRES_URL'); // Get the connection string from the environment variables
 
+  const connectionString = this.env.get('POSTGRES_URL'); // Get the connection string from the environment variables
   if(!connectionString) throw new Error('POSTGRES_URL environment variable is not set');
 
   // Create a new pool with the connection string
@@ -26,12 +26,12 @@ export const fetchRevenue = server$(async function () {
   try {
    const { rows } = await pool.query<Revenue>('SELECT * FROM revenue');
 
-    // Close the connection
-    await pool.end();
     return rows;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch revenue data: ' + (error as Error).message);
+  } finally {
+    await pool.end(); // Ensure the connection is always closed
   }
 });
 
@@ -49,11 +49,12 @@ export const fetchLatestInvoices = server$(async function () {
       ...invoice,
       amount: formatCurrency(invoice.amount),
     }));
-    await pool.end();
     return latestInvoices;
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch the latest invoices.');
+  } finally {
+    await pool.end();
   }
 });
 
@@ -81,8 +82,6 @@ export const fetchCardData = server$(async function () {
     const totalPaidInvoices = formatCurrency(data[2].rows[0].paid ?? '0');
     const totalPendingInvoices = formatCurrency(data[2].rows[0].pending ?? '0');
 
-    await pool.end();
-
     return {
       numberOfCustomers,
       numberOfInvoices,
@@ -92,5 +91,7 @@ export const fetchCardData = server$(async function () {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch card data.');
+  } finally {
+    await pool.end();
   }
 });
